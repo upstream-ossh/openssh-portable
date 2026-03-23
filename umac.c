@@ -1055,11 +1055,8 @@ static int uhash_update(uhash_ctx_t ctx, const u_char *input, long len)
     UINT64 result_buf[STREAMS];
     UINT8 *nh_result = (UINT8 *)&result_buf;
 
-    if (len < 0 || (unsigned long)len > UINT32_MAX)
-        return (0);
-
     if (ctx->msg_len + len <= L1_KEY_LEN) {
-        nh_update(&ctx->hash, (const UINT8 *)input, (UINT32)len);
+        nh_update(&ctx->hash, (const UINT8 *)input, len);
         ctx->msg_len += len;
     } else {
 
@@ -1096,7 +1093,6 @@ static int uhash_update(uhash_ctx_t ctx, const u_char *input, long len)
          /* pass remaining < L1_KEY_LEN bytes of input data to NH */
          if (len > 0 && (unsigned long)len <= UINT32_MAX) {
              nh_update(&ctx->hash, (const UINT8 *)input, len);
-             nh_update(&ctx->hash, (const UINT8 *)input, (UINT32)len);
              ctx->msg_len += len;
          }
      }
